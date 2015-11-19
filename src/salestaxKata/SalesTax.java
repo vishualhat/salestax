@@ -2,47 +2,75 @@ package salestaxKata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ListIterator;
 import java.util.Map;
 
 import test.Products;
 
 public class SalesTax {
-	Map products = new HashMap<String, Double>();
-	
-	static final double salesTax = 10.00;
-	static final double importTax = 5.00;
-	
-	public void acceptInput()
-	{
-		
+	Map<String, Double> products = new HashMap<String, Double>();
+
+	Map<String, Double> productTax = new HashMap<String, Double>();
+	Products prod = new Products(null);
+
+	static final double salesTax = 0.100;
+	static final double importTax = 0.150;
+
+	public void addToMap() {
+		products.putAll(prod.getExemptedProducts());
+		products.putAll(prod.getProducts());
+		products.putAll(prod.getImportedProducts());
 	}
-	
+
 	public Double calculateSalesTaxOnNonexemptedProducts(String neprod) {
-		double price = (double) products.get(neprod);
-		double stax = price*(0.10); 
-		double total = price + stax;
-		return total;
+		addToMap();
+		double price = Double.valueOf(products.get(neprod));
+		double stax = price * salesTax;
+		//double total = price + stax;
+		return stax;
 	}
-	
+
 	public Double calculateSalesTaxOnexemptedProducts(String eprod) {
-		double price = (double) products.get(eprod);
-		double stax = price*(0.00); 
-		double total = price + stax;
-		return total;
+		addToMap();
+		double price = Double.valueOf(products.get(eprod));
+		double stax = price;
+		return stax;
 	}
 
 	public Double calculateImportTaxOnImportedProducts(String iprod) {
-		double price = (double) products.get(iprod);
-		double stax = price*(0.15); 
-		double total = price + stax;
-		return total;
+		addToMap();
+		double price = Double.valueOf((double) products.get(iprod));
+		double stax = price * importTax;
+		return stax;
 	}
 
-	public Object taxCalculator(ArrayList productList) {
+	public Map<String, Double> taxCalculator(ArrayList<String> productList) {
 
-		
-		return null;
+		ListIterator<String> iterator = productList.listIterator();
+		while (iterator.hasNext()) {
+			String currentItem = iterator.previous();
+			if (prod.getProducts().containsKey(currentItem))
+
+			{	
+				// calculateSalesTaxOnNonexemptedProducts(currentItem);
+				double tax = calculateSalesTaxOnNonexemptedProducts(currentItem);
+				productTax.put(iterator.next(), tax);
+			}
+			if (prod.getExemptedProducts().containsKey(iterator.next()))
+
+			{
+				// calculateSalesTaxOnNonexemptedProducts(iterator.next());
+				double tax = calculateSalesTaxOnexemptedProducts(iterator.next());
+				productTax.put(iterator.next(), tax);
+			}
+			if (prod.getExemptedProducts().containsKey(iterator.next()))
+
+			{
+				// calculateImportTaxOnImportedProducts(iterator.next());
+				double tax = calculateImportTaxOnImportedProducts(iterator.next());
+				productTax.put(iterator.next(), tax);
+			}
+		}
+		return productTax;
 	}
-	
-	
 }

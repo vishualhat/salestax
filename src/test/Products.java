@@ -2,7 +2,6 @@ package test;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class Products {
 
@@ -12,13 +11,15 @@ public class Products {
 
 	public Products(String ProductName) {
 
-		nonExemptedProducts.put("music", 14.99);
+		nonExemptedProducts.put("musiccd", 14.99);
 		nonExemptedProducts.put("chocolate", 0.85);
 		importedProducts.put("impChocolate", 10.00);
 		importedProducts.put("impPerfume", 47.50);
 		exemptedProducts.put("book", 12.49);
 		exemptedProducts.put("chocolate", 0.85);
 		// return product.keySet();
+	
+		
 	}
 
 	/**
